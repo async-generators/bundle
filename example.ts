@@ -8,11 +8,7 @@ async function main() {
     yield 4;
     yield 5;
   }
-  for await (let item of buffer(source(), 2)) {
-    let items = [];
-    for (let subitem of item) {
-      items.push(subitem);
-    }
+  for await (let items of buffer(source(), 2)) {
     console.log(items);
   }
 }
