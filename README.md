@@ -23,23 +23,13 @@ Additionally, the `module` entry points to a `es2015` distribution, which can be
 
 ## Api
 
-### buffer(source, selector [,limit=20] [,limited])
+### buffer(source, condition)
 
-<code>buffer()</code> iterates `source` and executes `selector(item, index)` concurrently. Upon resolution of selector promise, the result is yielded. 
+<code>buffer()</code> iterates `source` and buffers each item until a `condition` is met, upon which the buffer array is yielded (as an array). If the `source` any remaining non-empty buffer is yielded.  
 
-`selector(item)` is awaited in a non-blocking fashion and `buffer` results are yielded in the _order of completion_. 
+if `condition` is a number then items are buffered until a `condition` number of items have been buffered. 
 
-If the the number of concurrent tasks is greater-than or equal-to `limit` further iteration of `source` is halted until other tasks complete. Upon halting, the `limited(item, index)` method is called (sync). If `limited` returns `true` the item is ignored not _not_ passed to   `selector`
-
-`source` must have a `[Symbol.asyncIterator]` or `[Symbol.iterator]` property. If both are present only `[Symbol.asyncIterator]` is used. 
-
-
-
-### buffer(source [,limit=20] [,limited])
-
-<code>buffer()</code> iterates `source` and awaits each item concurrently. Upon resolve, the result is yielded. `source` items are awaited in a non-blocking fashion and the results are yielded in the _order of completion_. 
-
-`source` must have a `[Symbol.asyncIterator]` or `[Symbol.iterator]` property. If both are present only `[Symbol.asyncIterator]` is used. `source` should _ideally_ yield executing promises, but technically can yield an object - although this makes the call to `buffer` entirely redundant. 
+if `condition` is a function then the items are buffered until `await condition() === false`. 
 
 ## Example
 
@@ -77,10 +67,9 @@ node --harmony-async-iteration example.js
 
 output:
 ```
-2
-1
-4
-3
+[ 1, 2 ]
+[ 3, 4 ]
+[ 5 ]
 ```
 ## Typescript
 
