@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "noUnusedLocals": true,
+    "noEmitOnError": true,
+    "lib": [
+      "dom",
+      "es2017",
+      "esnext.asynciterable"
+    ],
+    "types": [
+      "node",
+      "mocha",
+      "chai"
+    ]
+  }
+}
