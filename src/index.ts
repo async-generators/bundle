@@ -18,7 +18,7 @@ async function* untilCount<T>(
     yield items;
 }
 
-async function* whileFalse<T>(
+async function* whileTrue<T>(
   source: AsyncIterable<T> | Iterable<T>,
   condition: ((item: T, current: T[]) => boolean),
 ): AsyncIterable<T[]> {
@@ -43,5 +43,5 @@ export default function <T>(
   if (typeof condition == "number") {
     return untilCount(source, condition);
   }
-  return whileFalse(source, condition);
+  return whileTrue(source, condition);
 }
