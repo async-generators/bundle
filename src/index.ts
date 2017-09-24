@@ -4,7 +4,7 @@ async function* untilCount<T>(
   source: AsyncIterable<T> | Iterable<T>,
   count: number
 ): AsyncIterable<T[]> {
-  let items: T[] = []
+  let items: T[] = [];
 
   for await (let item of iterable(source)) {
     items.push(item);
@@ -13,22 +13,23 @@ async function* untilCount<T>(
       items = [];
     }
   }
+
   if (items.length > 0)
     yield items;
 }
 
-async function* whileTrue<T>(
+async function* whileFalse<T>(
   source: AsyncIterable<T> | Iterable<T>,
-  condition: (() => (Promise<boolean> | boolean))
+  condition: ((item: T, current: T[]) => boolean),
 ): AsyncIterable<T[]> {
   let items: T[] = []
 
   for await (let item of iterable(source)) {
-    items.push(item);
-    if (await condition() == true) {
+    if (condition(item, items) == false) {
       yield items;
       items = [];
     }
+    items.push(item);
   }
   if (items.length > 0)
     yield items;
@@ -36,11 +37,11 @@ async function* whileTrue<T>(
 
 export default function <T>(
   source: AsyncIterable<T> | Iterable<T>,
-  condition: number | (() => boolean | Promise<boolean>)
+  condition: number | ((item: T, current: T[]) => boolean)
 ): AsyncIterable<T[]> {
 
   if (typeof condition == "number") {
     return untilCount(source, condition);
   }
-  return whileTrue(source, condition);
+  return whileFalse(source, condition);
 }
