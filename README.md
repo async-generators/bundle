@@ -25,11 +25,11 @@ Additionally, the `module` entry points to a `es2015` distribution, which can be
 
 ### bundle(source, condition)
 
-<code>bundle()</code> iterates `source` and stores each item in an array until a `condition` is met, upon which the bundle array is yielded (as an array). If the `source` completes any remaining non-empty bundled array is yielded. 
+<code>bundle()</code> iterates `source` and stores each item in an array while a `condition` is true, after which the bundle array is yielded (as an array). If the `source` completes any remaining non-empty bundled array is yielded. 
 
 * when `condition` is a _number_, items are stored until the array contains `condition` number of items. 
 * when `condition` is a _function_, `source` items are stored in the current bundle if `condition(item, buffer) === true`. 
-* when `condition(item, buffer) === false` the current bundle is yielded and a new bundle is created containing the latest item. 
+* when `condition(item, buffer) === false` the current bundle is yielded (sans `item`) and a new bundle is created containing the latest item. 
 
 ## Example 1 - fixed size 
 
@@ -127,7 +127,6 @@ Execute with the latest node.js:
 ```
 node --harmony-async-iteration example.js
 ```
-
 
 output:
 ```

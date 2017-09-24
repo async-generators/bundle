@@ -1,6 +1,6 @@
 {
   "name": "@async-generators/bundle",
-  "description": "store items until a condition is met then yield items as an array",
+  "description": "convert an iterable sequence into array bundles",
   "version": "0.1.0",
   "author": {
     "name": "Meirion Hughes",
